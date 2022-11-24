@@ -11,7 +11,9 @@ const eventSchema = new Schema({
         trim: true
       },
       description: {
-        type: String
+        type: String,
+        required: true,
+        minlength: 1
       },
       image: {
         type: String
