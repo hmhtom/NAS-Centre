@@ -14,6 +14,7 @@ function Nav() {
       <AppBar position="static">
         <Toolbar variant="dense">
           <IconButton
+            href="/"
             size="large"
             edge="start"
             color="inherit"
@@ -24,7 +25,7 @@ function Nav() {
           <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
             Nas-Centre
           </Typography>
-          <Button color="inherit" startIcon={<LoginIcon />}>
+          <Button href="/login" color="inherit" startIcon={<LoginIcon />}>
             Login
           </Button>
         </Toolbar>
