@@ -16,7 +16,7 @@ function EventList() {
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" m={3} gutterBottom>
         What's On Now
       </Typography>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -28,6 +28,7 @@ function EventList() {
         </Tabs>
       </Box>
       <Grid container spacing={3} sx={{ p: 3 }}>
+        {/* Map out EventCard in each tab */}
         {/* {tabIndex === 0 && <EventCard />}
         {tabIndex === 1 && <EventCard />}
         {tabIndex === 2 && <EventCard />}

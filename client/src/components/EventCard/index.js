@@ -22,8 +22,14 @@ function EventCard(props) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Learn More</Button>
+          <Button href="/event" size="small">
+            Learn More
+          </Button>
+          {/* Render Sold out if there is no more seats */}
           <Button size="small">Buy Ticket</Button>
+          <Button size="small" disabled>
+            Sold Out
+          </Button>
         </CardActions>
       </Card>
     </Grid>
