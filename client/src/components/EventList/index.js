@@ -2,14 +2,41 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import EventCard from "../EventCard";
 import Grid from "@mui/material/Grid";
 
+// New imports
+import {useSelector, useDispatch} from "react-redux";
+import {updateEvent} from "../../utils/theaterSlice";
+import {useQuery} from "@apollo/client";
+import {QUERY_ALL_EVENTS} from "../../utils/queries";
+//
 function EventList() {
   const [tabIndex, setTabIndex] = useState(0);
+  //
+  const currentCategory = useSelector((state) => state.store.currentCategory);
+  const events = useSelector((state) => state.store.events);
+  const dispatch = useDispatch();
+  const {loading, data} = useQuery(QUERY_ALL_EVENTS)
 
+  useEffect(() => {
+    if (data) {
+      dispatch({
+        type: updateEvent,
+        events: data.events
+      });
+    }
+  }, [data, loading, dispatch]);
+
+  function filterEvents() {
+    if (!currentCategory){
+      return events;
+    }
+    return events.filter((event) => event.category._id === currentCategory);
+  }
+  //
   const handleChange = (event, newTabIndex) => {
     setTabIndex(newTabIndex);
   };
@@ -33,6 +60,20 @@ function EventList() {
         {tabIndex === 1 && <EventCard />}
         {tabIndex === 2 && <EventCard />}
         {tabIndex === 3 && <EventCard />} */}
+        
+        {filterEvents().map((event) => (
+          <EventCard
+            // Props go here
+            key={event._id}
+            _id={event._id}
+            image={event.image}
+            eventName={event.eventName}
+            description={event.description}
+            quantity={event.quantity}
+            date={event.date}
+          />
+        ))}
+
         <EventCard />
         <EventCard />
         <EventCard />
