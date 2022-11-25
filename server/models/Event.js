@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const ticketSchema = require('./Ticket');
 
 const { Schema } = mongoose;
-const Ticket = require ('./Ticket')
+const ticketSchema = require ('./Ticket')
 
 const eventSchema = new Schema({
 
@@ -29,7 +30,7 @@ const eventSchema = new Schema({
         type: Date,
         required: true
       },
-      tickets : [Ticket.schema]
+      tickets : [ticketSchema]
 
 });
 const Event = mongoose.model('Event', eventSchema);
