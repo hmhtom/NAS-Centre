@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const ticketSchema = require('./Ticket');
+const format = require("date-format");
 
 const { Schema } = mongoose;
-const Ticket = require ('./Ticket')
+
 
 const eventSchema = new Schema({
 
@@ -19,17 +21,12 @@ const eventSchema = new Schema({
         type: String
       },
 
-      quantity: {
-        type: Number,
-        min: 0,
-        default: 0
-      },
-
       date: {
         type: Date,
-        required: true
+        required: true,
+        get: (date) => format.asString("yyyy/MM/dd hh:mm:ss", date)
       },
-      tickets : [Ticket.schema]
+      tickets : [ticketSchema]
 
 });
 const Event = mongoose.model('Event', eventSchema);
