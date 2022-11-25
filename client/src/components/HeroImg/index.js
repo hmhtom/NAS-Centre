@@ -1,5 +1,17 @@
+import Box from "@mui/material/Box";
+
 function HeroImg() {
-  return <img src="https://via.placeholder.com/150" alt="" />;
+  return (
+    <Box
+      sx={{
+        height: "85vh",
+        backgroundImage: "url(https://source.unsplash.com/random)",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    />
+  );
 }
 
 export default HeroImg;
