@@ -23,7 +23,7 @@ const userSchema = new Schema(
       minlength: 5,
     },
     events: [Event.schema],
-    tickets: [ticketSchema],
+
   },
   {
     toJSON: {

@@ -1,19 +1,21 @@
 const { Schema } = require("mongoose");
+const format = require("date-format");
 
 
 const ticketSchema = new Schema({
   purchaseDate: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
+    get: (date) => format.asString("yyyy/MM/dd hh:mm:ss", date)
   },
   price: {
     type: Number,
     required: true,
-    min: 0.99,
+    min: 0.99
   },
 
   seatNumber: {
-    type: Number,
+    type: String,
     required: true,
   }
 }

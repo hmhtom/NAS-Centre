@@ -1,6 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
-const { User, Event, Category, Ticket } = require("../models");
+const { User, Event, Category} = require("../models");
 
 const resolvers = {
   Query: {
@@ -18,11 +18,11 @@ const resolvers = {
           $regex: eventName,
         };
       }
-      return await Ticket.find(params).populate(event);
+      return await Event.find(params).populate(event);
     },
 
     ticket: async (parents, { _id }) => {
-      return await Ticket.findById(_id).populate("event");
+      return await Event.findById(_id).populate("event");
     },
     user: async (parent, args, context) => {
       if (context.user) {
@@ -94,3 +94,4 @@ const resolvers = {
     },
   },
 };
+module.exports = resolvers;

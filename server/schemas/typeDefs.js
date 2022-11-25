@@ -2,12 +2,12 @@ const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
   type Category {
-    _id: ID
-    name: String
+    _id: ID!
+    name: String!
     events: [Event]
   }
   type Event {
-    _id: ID
+    _id: ID!
     eventName: String
     description: String
     image: String
@@ -28,7 +28,7 @@ const typeDefs = gql`
     _id: ID
     userName: String
     email: String
-    events: [Events]
+    events: [Event]
   }
 
   type Checkout {
@@ -62,7 +62,7 @@ const typeDefs = gql`
       password: String
     ): User
     saveTicket(userName: String!,  purchaseDate: String!, price: Float!, seatNumber: Int! ): User
-    deletTicket ( userName: String, ticketId: String!) 
+    deleteTicket( userName: String, ticketId: String!): User 
     login(email: String!, password: String!): Auth
   }
 `;
