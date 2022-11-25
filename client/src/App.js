@@ -9,6 +9,7 @@ import Event from "./pages/Event";
 
 //Import Components
 import Nav from "./components/Nav";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/event" component={Event} />
         </Switch>
       </Router>
+      <Footer />
     </>
   );
 }
