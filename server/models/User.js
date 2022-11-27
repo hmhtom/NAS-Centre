@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 const bcrypt = require("bcrypt");
-const Event = require("./Event");
-const ticketSchema = require("./Ticket");
+const Ticket = require('./Ticket')
+
 
 const userSchema = new Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: true,
       trim: true,
@@ -22,7 +22,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 5,
     },
-    events: [Event.schema],
+    tickets: [Ticket],
 
   },
   {

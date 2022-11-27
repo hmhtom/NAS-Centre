@@ -1,6 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
-const { User, Event, Category} = require("../models");
+const { User, Event, Category, Ticket } = require("../models");
 
 const resolvers = {
   Query: {
@@ -61,7 +61,7 @@ const resolvers = {
 
     updateUser: async (parent, args, context) => {
       if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, args, {
+        return await User.findByIdAndUpdate({ _id: context.user._id }, args, {
           new: true,
         });
       }
@@ -69,28 +69,43 @@ const resolvers = {
       throw new AuthenticationError("Not logged in");
     },
 
-    saveTicket: async (
-      parent,
-      { userName, purchaseDate, price, seatNumber },
-      context
-    ) => {
-      return User.findOneAndUpdate(
-        { userName: userName },
-        {
-          $addToSet: {
-            tickets: { purchaseDate, price, seatNumber },
-          },
-        },
-        { new: true, runValidators: true }
-      );
+    saveTicket: async (parent, args, context) => {
+      if (context.user) {
+        // create the ticket,
+        const decrement = Math.abs(availableSeats) * -1;
+        const ticket = await Ticket.create({_id: eventId, seatInfo: seatInfo, price : price});
+
+        // update the event with the ticketId push the ticket ID to the tickets sold array in the events
+        const updateEvent = await Event.findOneAndUpdate( _id, { $inc: { availableSeats : decrement } }, { new: true },
+        { $push: { ticketsSold: ticketId } } 
+            );
+
+        // update the user and pass w
+        const updateUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $push: { tickets: ticket } }
+        );
+
+        return updateUser;
+      }
+      throw new AuthenticationError("Not logged in");
     },
 
-    deleteTicket: async (parent, { userName, ticketId }) => {
-      return User.findOneAndUpdate(
-        { userName: userName },
-        { $pull: { tickets: { ticketId: ticketId } } },
-        { new: true }
-      );
+    deleteTicket: async (parent, { ticketId }) => {
+      if (context.user) {
+        const updateUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { tickets: { ticketId } } }
+        );
+
+        // update the event to add the ticket back to the available seat (pull the ticketId from the ticketsSold array)
+        const updateEvent = await Event.findOneAndUpdate(id, { $inc: { availableSeats : availableSeats} }, { new: true },
+        { $pull: { ticketsSold: ticketId } } )
+
+
+        return updateUser;
+      }
+      throw new AuthenticationError("Not logged in");
     },
   },
 };

@@ -8,27 +8,35 @@ const typeDefs = gql`
   }
   type Event {
     _id: ID!
-    eventName: String
-    description: String
-    image: String
-    quantity: Int
-    date: String
-    tickets: [Ticket]
+    eventName: String!
+    description: String!
+    image: String!
+    date: String!
+    price: Float!
+    availableSeat: Int!
+    ticketsSold: [Ticket]
   }
 
   type Ticket {
-    _id: ID
-    purchaseDate: String
-    price: Float
-    seatNumber: Int
-    user: User
+    _id: ID!
+    purchaseDate: String!
+    seatNumber: Int!
+    seatInfo: seatScheama!
+    eventId: [Event]
+    
+  }
+
+  type seatScheama {
+   _id: ID!
+    seatNumber: String!
+
   }
 
   type User {
-    _id: ID
-    userName: String
-    email: String
-    events: [Event]
+    _id: ID!
+    username: String!
+    email: String!
+    tickets: [Ticket]
   }
 
   type Checkout {
@@ -61,8 +69,8 @@ const typeDefs = gql`
       email: String
       password: String
     ): User
-    saveTicket(userName: String!,  purchaseDate: String!, price: Float!, seatNumber: Int! ): User
-    deleteTicket( userName: String, ticketId: String!): User 
+    saveTicket(price: Float!, eventId: String!, seatNumber: String!): User
+    deleteTicket(ticketId: String!): User 
     login(email: String!, password: String!): Auth
   }
 `;
