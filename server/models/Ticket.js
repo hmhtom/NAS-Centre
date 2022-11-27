@@ -1,4 +1,6 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
 const format = require("date-format");
 const seatSchema = require("./Seat");
 
@@ -21,6 +23,6 @@ const ticketSchema = new Schema({
     },
   ],
 });
-const Ticket= model('Ticket', ticketSchema);
+const Ticket= mongoose.model('Ticket', ticketSchema);
 
 module.exports = Ticket;

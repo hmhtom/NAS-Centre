@@ -21,12 +21,12 @@ const typeDefs = gql`
     _id: ID!
     purchaseDate: String!
     seatNumber: Int!
-    seatInfo: seatScheama!
+    seatInfo: Seat!
     eventId: [Event]
     
   }
 
-  type seatScheama {
+  type Seat {
    _id: ID!
     seatNumber: String!
 
