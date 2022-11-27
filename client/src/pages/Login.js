@@ -9,11 +9,18 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
+//
+import {useMutation} from '@apollo/client';
+import {LOGIN} from '../utils/mutations';
+import Auth from '../utils/auth';
+//
 export default function Login() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
+
+  const [login, {error}] = useMutation(LOGIN);
 
   //Handling form input change and store form value to state
   const handleChange = (event) => {
@@ -25,8 +32,21 @@ export default function Login() {
   };
 
   //Handling form submit
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const loginResponse = await login ({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+        },
+      });
+      const token = loginResponse.data.login.token;
+      Auth.login(token);
+    } catch (err) {
+      // Insert error message render here?
+      console.log(err)
+    }
     console.log(formState);
   };
 
