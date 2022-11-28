@@ -16,25 +16,29 @@ import {QUERY_ALL_EVENTS} from "../../utils/queries";
 function EventList() {
   const [tabIndex, setTabIndex] = useState(0);
   //
-  const currentCategory = useSelector((state) => state.store.currentCategory);
-  const events = useSelector((state) => state.store.events);
+  //const currentCategory = useSelector((state) => state.store.currentCategory);
+  const events = useSelector((state) => state.theater.events);
   const dispatch = useDispatch();
   const {loading, data} = useQuery(QUERY_ALL_EVENTS)
-
+  console.log(useQuery(QUERY_ALL_EVENTS));
   useEffect(() => {
+    console.log("use effect touched");
     if (data) {
+      console.log(data);
+      
       dispatch({
         type: updateEvent,
-        events: data.events
+        events: data.allEvents
       });
+      console.log(data);
     }
   }, [data, loading, dispatch]);
 
   function filterEvents() {
-    if (!currentCategory){
+    //if (!currentCategory){
       return events;
-    }
-    return events.filter((event) => event.category._id === currentCategory);
+   // }
+   // return events.filter((event) => event.category._id === currentCategory);
   }
   //
   const handleChange = (event, newTabIndex) => {

@@ -45,7 +45,7 @@ export default function SignUp() {
       console.log("Password validate succesful");
       const mutationResponse = await addUser({
         variables: {
-          userName: formState.username,
+          username: formState.username,
           email: formState.email,
           password: formState.password,
         },

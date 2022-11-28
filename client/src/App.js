@@ -50,7 +50,7 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/event" component={Event} />
+            <Route exact path="/event/:id" component={Event} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/tickets" component={MyTickets} />
           </Switch>

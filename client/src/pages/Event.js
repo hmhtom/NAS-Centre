@@ -22,11 +22,12 @@ import {QUERY_EVENT} from '../utils/queries';
 export default function Event() {
 
   const {id} = useParams();
-  const events = useSelector((state) => state.store.events);
+  const events = useSelector((state) => state.theater.events);
   const dispatch = useDispatch();
   const [currentEvent, setCurrentEvent] = useState({});
   const {loading, data} = useQuery(QUERY_EVENT);
-
+  console.log(id);
+  console.log(data);
   useEffect(() => {
     if (events.length) {
       setCurrentEvent(events.find((event) => event._id === id));

@@ -2,15 +2,16 @@ import {gql} from '@apollo/client';
 
 export const QUERY_ALL_EVENTS = gql`
     {
-        events {
+        allEvents {
             _id
             eventName
             description
             image
             date
-            quantity
-            tickets {
-                price
+            price
+            availableSeats
+            ticketsSold {
+                _id
             }
 
         }
