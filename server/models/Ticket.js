@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 const format = require("date-format");
-const seatSchema = require("./Seat");
 
 const ticketSchema = new Schema({
   purchaseDate: {
@@ -12,17 +11,17 @@ const ticketSchema = new Schema({
   },
 
   //   seatId
-  seatInfo: seatSchema,
-
+  seatInfo: {
+    type: Schema.Types.ObjectID,
+    ref: "Seat",
+  },
 
   // eventId
-  event: 
-    {
-      type: Schema.Types.ObjectID,
-      ref: 'Event',
-    },
-  
+  event: {
+    type: Schema.Types.ObjectID,
+    ref: "Event",
+  },
 });
-const Ticket= mongoose.model('Ticket', ticketSchema);
+const Ticket = mongoose.model("Ticket", ticketSchema);
 
 module.exports = Ticket;

@@ -6,6 +6,7 @@ const typeDefs = gql`
     name: String!
     events: [Event]
   }
+
   type Event {
     _id: ID!
     eventName: String!
@@ -13,7 +14,7 @@ const typeDefs = gql`
     image: String!
     date: String!
     price: Float!
-    availableSeat: Int!
+    availableSeats: Int!
     ticketsSold: [Ticket]
   }
 
@@ -24,9 +25,8 @@ const typeDefs = gql`
     image: String!
     date: String!
     price: Float!
-    availableSeat: Int!
+    availableSeats: Int!
     ticketsSold: [TicketInput]
-
   }
 
   type Ticket {
@@ -34,28 +34,22 @@ const typeDefs = gql`
     purchaseDate: String!
     seatInfo: Seat!
     event: Event
-    
   }
   input TicketInput {
     _id: ID!
     purchaseDate: String!
     seatInfo: SeatInput!
     event: EventInput
-
   }
 
-
   type Seat {
-   _id: ID!
+    _id: ID!
     seatNumber: String!
-
   }
   input SeatInput {
     _id: ID!
     seatNumber: String!
-
   }
-  
 
   type User {
     _id: ID!
@@ -73,30 +67,21 @@ const typeDefs = gql`
     user: User
   }
 
-
   type Query {
+    allEvents: [Event]
     categories: [Category]
     tickets(event: ID, eventName: String, date: String): [Ticket]
     ticket(_id: ID!): Ticket
     user: User
-    events(Category: ID, name: String): [Event]
     event(_id: ID!): Event
     checkout(tickets: [TicketInput]!): Checkout
   }
 
   type Mutation {
-    addUser(
-      userName: String!
-      email: String!
-      password: String!
-    ): Auth
-    updateUser(
-      userName: String
-      email: String
-      password: String
-    ): User
+    addUser(userName: String!, email: String!, password: String!): Auth
+    updateUser(userName: String, email: String, password: String): User
     saveTicket(ticket: TicketInput!): User
-    deleteTicket(ticketId: String!): User 
+    deleteTicket(ticketId: String!): User
     login(email: String!, password: String!): Auth
   }
 `;

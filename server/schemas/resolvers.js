@@ -1,12 +1,17 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
-const { User, Event, Category, Ticket } = require("../models");
-const stripe = require('stripe')('sk_test_51M6zGyKNGVTArXAyTE99N2iYJt6SwpLifGKmtyaB0hhF4tVuKkAISTmZy7AFWeP6WE71FPGhNYmymVpYt4WtBPos00w3IuU3iU');
+const { User, Event, Category, Ticket, Seat } = require("../models");
+const stripe = require("stripe")(
+  "sk_test_51M6zGyKNGVTArXAyTE99N2iYJt6SwpLifGKmtyaB0hhF4tVuKkAISTmZy7AFWeP6WE71FPGhNYmymVpYt4WtBPos00w3IuU3iU"
+);
 
 const resolvers = {
   Query: {
+    allEvents: async () => {
+      return await Event.find();
+    },
     categories: async () => {
-      return await Category.find();
+      return await Category.find().populate("events");
     },
     tickets: async (parents, { event, eventName }) => {
       const params = {};
@@ -35,42 +40,39 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
     checkout: async (parent, args, context) => {
-        const url = new URL(context.headers.referer).origin;
-       
-        const line_items = [];
-  
-        
-  
-        for (let i = 0; i < args.length; i++) {
-          const events = await stripe.events.create({
-            name: events[i].eventName,
-            description: events[i].description,
-            // images: [`${url}/images/${event[i].image}`]
-          });
-  
-          const price = await stripe.prices.create({
-            event: event.id,
-            unit_amount: events[i].price * 100,
-            currency: 'usd',
-          });
-  
-          line_items.push({
-            price: price.id,
-            ticketsSold: 1
-          });
-        }
-  
-        const session = await stripe.checkout.sessions.create({
-          payment_method_types: ['card'],
-          line_items,
-          mode: 'payment',
-          success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${url}/`
+      const url = new URL(context.headers.referer).origin;
+
+      const line_items = [];
+
+      for (let i = 0; i < args.length; i++) {
+        const events = await stripe.events.create({
+          name: events[i].eventName,
+          description: events[i].description,
+          // images: [`${url}/images/${event[i].image}`]
         });
-  
-        return { session: session.id };
+
+        const price = await stripe.prices.create({
+          event: event.id,
+          unit_amount: events[i].price * 100,
+          currency: "usd",
+        });
+
+        line_items.push({
+          price: price.id,
+          ticketsSold: 1,
+        });
       }
-    
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items,
+        mode: "payment",
+        success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/`,
+      });
+
+      return { session: session.id };
+    },
   },
 
   Mutation: {
@@ -114,16 +116,18 @@ const resolvers = {
         const ticket = await Ticket.create(args);
 
         // update the event with the ticketId push the ticket ID to the tickets sold array in the events
-        console.log(ticket)
-        const updateEvent = await Event.findOneAndUpdate( {_id:Ticket.event}, { $inc: { availableSeats : Math.abs(args.event.availableSeats) -1 } }, { new: true },
-        { $push: { ticketsSold: ticket } } 
-            );
-          
+        console.log(ticket);
+        const updateEvent = await Event.findOneAndUpdate(
+          { _id: Ticket.event },
+          { $inc: { availableSeats: Math.abs(args.event.availableSeats) - 1 } },
+          { new: true },
+          { $push: { ticketsSold: ticket } }
+        );
 
         // update the user and pass w
         const updateUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $push: { tickets: {tickets} } }
+          { $push: { tickets: { tickets } } }
         );
 
         return updateUser;
@@ -139,9 +143,12 @@ const resolvers = {
         );
 
         // update the event to add the ticket back to the available seat (pull the ticketId from the ticketsSold array)
-        const updateEvent = await Event.findOneAndUpdate(id, { $inc: { availableSeats : availableSeats} }, { new: true },
-        { $pull: { ticketsSold: ticketId } } )
-
+        const updateEvent = await Event.findOneAndUpdate(
+          id,
+          { $inc: { availableSeats: availableSeats } },
+          { new: true },
+          { $pull: { ticketsSold: ticketId } }
+        );
 
         return updateUser;
       }

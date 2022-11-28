@@ -1,4 +1,3 @@
-
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
@@ -20,16 +19,15 @@ const server = new ApolloServer({
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use("/", (req, res, next) => {
-  console.log(req.headers);
-  next();
-})
+// app.use("/", (req, res, next) => {
+//   console.log(req.headers);
+//   next();
+// })
 // if we're in production, serve client/build as static assets
 app.use("/images", express.static(path.join(__dirname, "../client/images")));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 }
-
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
@@ -46,8 +44,3 @@ const startApolloServer = async (typeDefs, resolvers) => {
 };
 
 startApolloServer(typeDefs, resolvers);
-
-
-
-
-
