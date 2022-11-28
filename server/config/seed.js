@@ -1,73 +1,83 @@
 const db = require("./connection");
-const { User, Category, Event } = require("../models");
+const { Category, Event, Seat } = require("../models");
+
+const eventDetail = [
+  {
+    eventName: "Toronto Raptors Vs. Cleveland Cavaliers",
+    description:
+      "The Cleveland Cavaliers (13-7, 12-7-2 ATS, 10-11 O/U) take on the Toronto Raptors (10-9, 11-8 ATS, 10-9 O/U) in an Eastern Conference battle on Monday night. The Cavaliers beat the Pistons on Sunday. The Raptors collected a home win against the Mavericks on Saturday. Toronto recorded a 108-105 home win in the lone meeting this season.",
+    image: "toronto-raptors.png",
+    date: " 2022/11/30 09:30",
+    price: 117.0,
+  },
+  {
+    eventName:
+      "Toronto Maple Leafs vs. San Jose Sharks. The game is played at NAS Centre. This game is part of NHL.",
+    description: "Toronto Maple Leafs is playing against San Jose Sharks. ",
+    image: "toronto-maple-leaf.jpg",
+    date: " 2022/12/01 09:30",
+    price: 129.0,
+  },
+  {
+    eventName: "Dave Chappelle: In Your Dreams",
+    description: "Dave Chappelle: In Your Dreams",
+    image: "in-your-dream.jpg",
+    date: " 2022/12/03 09:30",
+    price: 106.0,
+  },
+  {
+    eventName: "Metallica: World Tour (Toronto)",
+    description:
+      "Metallica is an American heavy metal band. The band was formed in 1981 in Los Angeles by vocalist/guitarist James Hetfield and drummer Lars Ulrich and has been based in San Francisco for most of its career.[1][2] The band's fast tempos, instrumentals and aggressive musicianship made them one of the founding \"big four\" bands of thrash metal, alongside Megadeth, Anthrax and Slayer. Metallica's current lineup comprises founding members and primary songwriters Hetfield and Ulrich, longtime lead guitarist Kirk Hammett and bassist Robert Trujillo. Guitarist Dave Mustaine (who formed Megadeth after being fired from the band) and bassists Ron McGovney, Cliff Burton and Jason Newsted are former members of the band.",
+    image: "metallica.jpg",
+    date: " 2022/12/01 09:30",
+    price: 127.0,
+  },
+];
+
+const createEvent = async (eventInfo, categoryName) => {
+  const event = await Event.create(eventInfo);
+  await Category.findOneAndUpdate(
+    { name: categoryName },
+    { $addToSet: { events: event._id } }
+  );
+};
+
+const seats = [];
+
+for (let i = 1; i <= 20; i++) {
+  seats.push({ seatNumber: `${i}A` });
+  seats.push({ seatNumber: `${i}B` });
+  seats.push({ seatNumber: `${i}C` });
+  seats.push({ seatNumber: `${i}D` });
+  seats.push({ seatNumber: `${i}E` });
+}
 
 db.once("open", async () => {
   await Category.deleteMany();
   const categories = await Category.insertMany([
-    { name: "Concert", events: [events[4]._id] },
-    { name: "Sports" },
-    { name: "Shows", events: [events[2]._id, events[1]._id, events[3]._id] },
+    {
+      name: "Sport",
+    },
+    {
+      name: "Comedy",
+    },
+    {
+      name: "Concert",
+    },
   ]);
-  console.log("categories seeded");
 
   await Event.deleteMany();
-  const events = await Event.insertMany([
-    {
-      eventName: "Black Adam",
-      description:
-        "Black Adam is a 2022 American superhero film starring Dwayne Johnson as the titular DC Comics character. The film is related to Shazam!",
-      image: "black-adam.png",
-      date: " 2022/11/30 09:30",
-      price: 24.0,
-      availableSeats: 100,
-    },
-    {
-      eventName: "Black Panther: Wakanda Forever",
-      description:
-        "Black Panther: Wakanda Forever is a 2022 American superhero film based on the Marvel Comics character Black Panther",
-      image: "wakanda-forever.jpg",
-      date: " 2022/12/01 09:30",
-      price: 27.0,
-      availableSeats: 100,
-    },
-    {
-      eventName: "Strange World",
-      description:
-        "Strange World is a 2022 American computer animated science fiction adventure film produced by Walt Disney Animation Studios and distributed by Walt Disney",
-      image: "strange-world.jpg",
-      date: " 2022/12/03 09:30",
-      price: 27.0,
-      availableSeats: 100,
-    },
-    {
-      eventName: "Metallica",
-      description: "Music concer",
-      image: "metallica.jpg",
-      date: " 2022/12/01 09:30",
-      price: 27.0,
-      availableSeats: 100,
-    },
-  ]);
-  console.log("events seeded");
+  await createEvent(eventDetail[0], "Sport");
+  await createEvent(eventDetail[1], "Sport");
+  await createEvent(eventDetail[2], "Concert");
+  await createEvent(eventDetail[3], "Comedy");
 
-  await User.deleteMany();
+  await Seat.deleteMany();
+  await Seat.insertMany(seats);
+  console.log(seats);
 
-  await User.create({
-    firstName: "Pamela",
-    lastName: "Washington",
-    email: "pamela@testmail.com",
-    password: "password12345",
-    tickets: [events[0]._id],
-  });
-
-  await User.create({
-    firstName: "Elijah",
-    lastName: "Holt",
-    email: "eholt@testmail.com",
-    password: "password12345",
-  });
-
-  console.log("users seeded");
+  console.log("Seeding Complete");
 
   process.exit();
 });

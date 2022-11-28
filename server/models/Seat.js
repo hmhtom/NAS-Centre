@@ -6,6 +6,10 @@ const seatSchema = new Schema({
   seatNumber: {
     type: String,
     required: true,
+    unique: true,
   },
 });
-module.exports = seatSchema;
+
+const Seat = mongoose.model("Seat", seatSchema);
+
+module.exports = Seat;
