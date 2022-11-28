@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,9 +12,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
 //
-import {useMutation} from '@apollo/client';
-import {ADD_USER} from '../utils/mutations.js';
-import Auth from '../utils/auth';
+import { useMutation } from "@apollo/client";
+import { ADD_USER } from "../utils/mutations.js";
+import Auth from "../utils/auth";
 //
 
 export default function SignUp() {
@@ -37,26 +39,25 @@ export default function SignUp() {
   //Handling form submit
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Submit succesful")
+    console.log("Submit succesful");
     console.log(formState);
     if (formState.password === formState.confirmPassword) {
-      console.log("Password validate succesful")
-    const mutationResponse = await addUser({
-      variables: {
-        userName: formState.username,
-        email: formState.email,
-        password: formState.password
-      }
-    });
-    console.log(mutationResponse);
-    const token = mutationResponse.data.addUser.token;
-    console.log(token);
-    Auth.login(token);
-  }
-  else {
-    // If password does not match confirm password
-    console.log("Password error message")
-  }
+      console.log("Password validate succesful");
+      const mutationResponse = await addUser({
+        variables: {
+          userName: formState.username,
+          email: formState.email,
+          password: formState.password,
+        },
+      });
+      console.log(mutationResponse);
+      const token = mutationResponse.data.addUser.token;
+      console.log(token);
+      Auth.login(token);
+    } else {
+      // If password does not match confirm password
+      console.log("Password error message");
+    }
     console.log(formState);
   };
 
@@ -150,7 +151,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Link component={RouterLink} to="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
