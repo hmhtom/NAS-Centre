@@ -1,4 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import {useQuery} from '@apollo/client';
+
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -9,7 +12,30 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  updateEvent,
+} from "../utils/theaterSlice";
+
+import {QUERY_EVENT} from '../utils/queries';
+
 export default function Event() {
+
+  const {id} = useParams();
+  const events = useSelector((state) => state.store.events);
+  const dispatch = useDispatch();
+  const [currentEvent, setCurrentEvent] = useState({});
+  const {loading, data} = useQuery(QUERY_EVENT);
+
+  useEffect(() => {
+    if (events.length) {
+      setCurrentEvent(events.find((event) => event._id === id));
+    }
+    else if (data) {
+      dispatch({ type: updateEvent, events: data.events,});
+    }
+  },[events, data, loading, dispatch, id]);
+
   return (
     <Grid container sx={{ justifyContent: "space-around" }}>
       <Grid
@@ -29,25 +55,37 @@ export default function Event() {
       />
       <Grid item xs={12} sm={11} md={9} lg={8} m={3} component={Paper}>
         <Typography variant="h4" mx={3} gutterBottom>
-          Placer Holder for Event Name
+          {currentEvent.eventName}
         </Typography>
         <Typography variant="h6" m={3} gutterBottom>
           Placer Holder for SubTitle(Performer Name/Sport Team)
         </Typography>
         <Typography variant="body1" m={3} gutterBottom>
-          Description: Here is the description of the event.
+          {currentEvent.description}
         </Typography>
         <Typography variant="body1" m={3} gutterBottom>
-          ShowTime: 9999/Nov/24 9:00PM
+          {currentEvent.date}
         </Typography>
         <Box m={3}>
           {/* Render Sold out if there is no more available seats */}
+          {currentEvent.tickets.length > 0 &&
+          <div>
           <Button fullWidth variant="contained">
             Buy Ticket
           </Button>
           <Button fullWidth variant="contained" disabled>
             Sold Out
           </Button>
+          </div>}
+          {currentEvent.tickets.length == 0 &&
+          <div>
+          <Button fullWidth variant="contained" disabled>
+            Buy Ticket
+          </Button>
+          <Button fullWidth variant="contained">
+            Sold Out
+          </Button>
+          </div>}
         </Box>
       </Grid>
       <Grid item xs={12} sm={11} md={9} lg={8} m={3}>
