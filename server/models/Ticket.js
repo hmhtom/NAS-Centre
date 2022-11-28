@@ -1,25 +1,28 @@
-const { Schema } = require("mongoose");
-const format = require("date-format");
+const mongoose = require('mongoose');
 
+const { Schema } = mongoose;
+const format = require("date-format");
+const seatSchema = require("./Seat");
 
 const ticketSchema = new Schema({
   purchaseDate: {
     type: Date,
     default: Date.now(),
-    get: (date) => format.asString("yyyy/MM/dd hh:mm:ss", date)
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: 0.99
+    get: (date) => format.asString("yyyy/MM/dd hh:mm:ss", date),
   },
 
-  seatNumber: {
-    type: String,
-    required: true,
-  }
-}
+  //   seatId
+  seatInfo: seatSchema,
 
-);
 
-module.exports = ticketSchema;
+  // eventId
+  event: 
+    {
+      type: Schema.Types.ObjectID,
+      ref: 'Event',
+    },
+  
+});
+const Ticket= mongoose.model('Ticket', ticketSchema);
+
+module.exports = Ticket;

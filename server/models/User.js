@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const bcrypt = require("bcrypt");
-const Event = require("./Event");
-const ticketSchema = require("./Ticket");
+const bcrypt = require('bcrypt');
+const Ticket = require('./Ticket')
+
 
 const userSchema = new Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: true,
       trim: true,
@@ -22,7 +22,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 5,
     },
-    events: [Event.schema],
+    tickets: [Ticket.schema],
 
   },
   {
@@ -47,6 +47,6 @@ userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

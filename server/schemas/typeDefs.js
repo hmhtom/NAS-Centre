@@ -8,27 +8,60 @@ const typeDefs = gql`
   }
   type Event {
     _id: ID!
-    eventName: String
-    description: String
-    image: String
-    quantity: Int
-    date: String
-    tickets: [Ticket]
+    eventName: String!
+    description: String!
+    image: String!
+    date: String!
+    price: Float!
+    availableSeat: Int!
+    ticketsSold: [Ticket]
+  }
+
+  input EventInput {
+    _id: ID!
+    eventName: String!
+    description: String!
+    image: String!
+    date: String!
+    price: Float!
+    availableSeat: Int!
+    ticketsSold: [TicketInput]
+
   }
 
   type Ticket {
-    _id: ID
-    purchaseDate: String
-    price: Float
-    seatNumber: Int
-    user: User
+    _id: ID!
+    purchaseDate: String!
+    seatInfo: Seat!
+    event: Event
+    
+  }
+  input TicketInput {
+    _id: ID!
+    purchaseDate: String!
+    seatInfo: SeatInput!
+    event: EventInput
+
   }
 
+
+  type Seat {
+   _id: ID!
+    seatNumber: String!
+
+  }
+  input SeatInput {
+    _id: ID!
+    seatNumber: String!
+
+  }
+  
+
   type User {
-    _id: ID
-    userName: String
-    email: String
-    events: [Event]
+    _id: ID!
+    username: String!
+    email: String!
+    tickets: [Ticket]
   }
 
   type Checkout {
@@ -40,6 +73,7 @@ const typeDefs = gql`
     user: User
   }
 
+
   type Query {
     categories: [Category]
     tickets(event: ID, eventName: String, date: String): [Ticket]
@@ -47,7 +81,7 @@ const typeDefs = gql`
     user: User
     events(Category: ID, name: String): [Event]
     event(_id: ID!): Event
-    checkout(tickets: [ID]!): Checkout
+    checkout(tickets: [TicketInput]!): Checkout
   }
 
   type Mutation {
@@ -61,8 +95,8 @@ const typeDefs = gql`
       email: String
       password: String
     ): User
-    saveTicket(userName: String!,  purchaseDate: String!, price: Float!, seatNumber: Int! ): User
-    deleteTicket( userName: String, ticketId: String!): User 
+    saveTicket(ticket: TicketInput!): User
+    deleteTicket(ticketId: String!): User 
     login(email: String!, password: String!): Auth
   }
 `;
