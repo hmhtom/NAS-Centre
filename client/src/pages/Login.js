@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,18 +11,17 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
-//
-import {useMutation} from '@apollo/client';
-import {LOGIN} from '../utils/mutations';
-import Auth from '../utils/auth';
-//
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../utils/mutations";
+import Auth from "../utils/auth";
+
 export default function Login() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
 
-  const [login, {error}] = useMutation(LOGIN);
+  const [login] = useMutation(LOGIN);
 
   //Handling form input change and store form value to state
   const handleChange = (event) => {
@@ -35,7 +36,7 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const loginResponse = await login ({
+      const loginResponse = await login({
         variables: {
           email: formState.email,
           password: formState.password,
@@ -45,9 +46,8 @@ export default function Login() {
       Auth.login(token);
     } catch (err) {
       // Insert error message render here?
-      console.log(err)
+      console.log(err);
     }
-    console.log(formState);
   };
 
   return (
@@ -115,7 +115,7 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link component={RouterLink} to="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

@@ -1,3 +1,6 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -22,7 +25,10 @@ function EventCard(props) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button href="/event" size="small">
+          {/* <Link to="/event">
+            <Button>Learn More</Button>
+          </Link> */}
+          <Button component={Link} to="/event">
             Learn More
           </Button>
           {/* Render Sold out if there is no more seats */}

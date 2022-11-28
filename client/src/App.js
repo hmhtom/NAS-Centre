@@ -7,7 +7,7 @@ import {
   ApolloProvider,
   createHttpLink,
 } from "@apollo/client";
-import {setContext} from "@apollo/client/link/context";
+import { setContext } from "@apollo/client/link/context";
 //Import Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -24,7 +24,7 @@ const httpLink = createHttpLink({
   uri: "/graphql",
 });
 
-const authLink = setContext((_, {headers}) => {
+const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
   return {
     headers: {
@@ -34,7 +34,7 @@ const authLink = setContext((_, {headers}) => {
   };
 });
 
-const client = new ApolloClient ({
+const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
@@ -42,19 +42,20 @@ const client = new ApolloClient ({
 function App() {
   return (
     <>
-    <ApolloProvider client={client}>
-      <Nav />
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={SignUp} />
-          <Route exact path="/event" component={Event} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/tickets" component={MyTickets} />
-        </Switch>
-      </Router>
-      <Footer />
+      <ApolloProvider client={client}>
+        <Router>
+          <Nav />
+
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/event" component={Event} />
+            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/tickets" component={MyTickets} />
+          </Switch>
+        </Router>
+        <Footer />
       </ApolloProvider>
     </>
   );
