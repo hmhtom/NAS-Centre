@@ -20,7 +20,9 @@ export const theaterSlice = createSlice({
       state.events = updatedList;
     },
     updateEvent: (state, actions) => {
-      state.currentEvent = actions.currentEvent;
+        console.log("Action touched");
+        console.log(actions);
+      state.events = actions.events;
     },
     addTicket: (state, actions) => {
       state.tickets = [...state.tickets, actions.tickets];
