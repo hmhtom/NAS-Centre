@@ -1,7 +1,7 @@
 import { createSlice} from '@reduxjs/toolkit';
 
 export const theaterSlice = createSlice({
-    name: 'theater',
+    name: "theater",
     initialState: {
         // Populate these as needed down the line
         events: [],
@@ -33,6 +33,7 @@ export const theaterSlice = createSlice({
             state.tickets = updatedList;
         },
         addUser: (state, actions) => {
+            console.log("Adding user");
             state.users = [...state.users, actions.users]
         },
         updateUser: (state, actions) => {
@@ -49,7 +50,9 @@ export const {
     updateTicket,
     removeTicket,
     addUser,
-    removeUser,
+    updateUser,
 } = theaterSlice.actions
 
-export default theaterSlice.reducers;
+console.log(theaterSlice.reducer);
+
+export default theaterSlice.reducer;

@@ -9,6 +9,12 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
+//
+import {useMutation} from '@apollo/client';
+import {ADD_USER} from '../utils/mutations.js';
+import Auth from '../utils/auth';
+//
+
 export default function SignUp() {
   const [formState, setFormState] = useState({
     username: "",
@@ -16,6 +22,8 @@ export default function SignUp() {
     password: "",
     confirmPassword: "",
   });
+
+  const [addUser] = useMutation(ADD_USER);
 
   //Handling form input change and store form value to state
   const handleChange = (event) => {
@@ -27,8 +35,28 @@ export default function SignUp() {
   };
 
   //Handling form submit
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("Submit succesful")
+    console.log(formState);
+    if (formState.password === formState.confirmPassword) {
+      console.log("Password validate succesful")
+    const mutationResponse = await addUser({
+      variables: {
+        userName: formState.username,
+        email: formState.email,
+        password: formState.password
+      }
+    });
+    console.log(mutationResponse);
+    const token = mutationResponse.data.addUser.token;
+    console.log(token);
+    Auth.login(token);
+  }
+  else {
+    // If password does not match confirm password
+    console.log("Password error message")
+  }
     console.log(formState);
   };
 
