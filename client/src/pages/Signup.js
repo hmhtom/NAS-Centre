@@ -37,15 +37,20 @@ export default function SignUp() {
   //Handling form submit
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("Submit succesful")
+    console.log(formState);
     if (formState.password === formState.confirmPassword) {
+      console.log("Password validate succesful")
     const mutationResponse = await addUser({
       variables: {
-        username: formState.username,
+        userName: formState.username,
         email: formState.email,
         password: formState.password
       }
     });
+    console.log(mutationResponse);
     const token = mutationResponse.data.addUser.token;
+    console.log(token);
     Auth.login(token);
   }
   else {

@@ -33,6 +33,7 @@ export const theaterSlice = createSlice({
             state.tickets = updatedList;
         },
         addUser: (state, actions) => {
+            console.log("Adding user");
             state.users = [...state.users, actions.users]
         },
         updateUser: (state, actions) => {
