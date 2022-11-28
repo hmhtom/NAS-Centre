@@ -68,7 +68,8 @@ export default function Event() {
         </Typography>
         <Box m={3}>
           {/* Render Sold out if there is no more available seats */}
-          {currentEvent.tickets.length > 0 &&
+          {currentEvent.tickets.length > 0 
+          ?
           <div>
           <Button fullWidth variant="contained">
             Buy Ticket
@@ -76,8 +77,8 @@ export default function Event() {
           <Button fullWidth variant="contained" disabled>
             Sold Out
           </Button>
-          </div>}
-          {currentEvent.tickets.length == 0 &&
+          </div>
+          :
           <div>
           <Button fullWidth variant="contained" disabled>
             Buy Ticket
