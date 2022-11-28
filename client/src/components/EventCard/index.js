@@ -27,15 +27,15 @@ function EventCard(props) {
             Learn More
           </Button>
           {/* Render Sold out if there is no more seats */}
-          {props.quantity == 0 && 
+          {props.quantity == 0 
+          ? 
           <div>
           <Button size="small" disabled>Buy Ticket</Button>
           <Button size="small">
           Sold Out
             </Button>
           </div>
-          }
-          {props.quantity > 0 &&
+          :
           <div>
             <Button size="small">Buy Ticket</Button>
             <Button size="small" disabled>
