@@ -1,6 +1,7 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 const { User, Event, Category, Ticket } = require("../models");
+const stripe = require('stripe')('sk_test_51M6zGyKNGVTArXAyTE99N2iYJt6SwpLifGKmtyaB0hhF4tVuKkAISTmZy7AFWeP6WE71FPGhNYmymVpYt4WtBPos00w3IuU3iU');
 
 const resolvers = {
   Query: {
@@ -33,6 +34,43 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    checkout: async (parent, args, context) => {
+        const url = new URL(context.headers.referer).origin;
+       
+        const line_items = [];
+  
+        
+  
+        for (let i = 0; i < args.length; i++) {
+          const events = await stripe.events.create({
+            name: events[i].eventName,
+            description: events[i].description,
+            // images: [`${url}/images/${event[i].image}`]
+          });
+  
+          const price = await stripe.prices.create({
+            event: event.id,
+            unit_amount: events[i].price * 100,
+            currency: 'usd',
+          });
+  
+          line_items.push({
+            price: price.id,
+            ticketsSold: 1
+          });
+        }
+  
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ['card'],
+          line_items,
+          mode: 'payment',
+          success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${url}/`
+        });
+  
+        return { session: session.id };
+      }
+    
   },
 
   Mutation: {
@@ -72,18 +110,20 @@ const resolvers = {
     saveTicket: async (parent, args, context) => {
       if (context.user) {
         // create the ticket,
-        const decrement = Math.abs(availableSeats) * -1;
-        const ticket = await Ticket.create({_id: eventId, seatInfo: seatInfo, price : price});
+        // const decrement = Math.abs(availableSeats) * -1;
+        const ticket = await Ticket.create(args);
 
         // update the event with the ticketId push the ticket ID to the tickets sold array in the events
-        const updateEvent = await Event.findOneAndUpdate( _id, { $inc: { availableSeats : decrement } }, { new: true },
-        { $push: { ticketsSold: ticketId } } 
+        console.log(ticket)
+        const updateEvent = await Event.findOneAndUpdate( {_id:Ticket.event}, { $inc: { availableSeats : Math.abs(args.event.availableSeats) -1 } }, { new: true },
+        { $push: { ticketsSold: ticket } } 
             );
+          
 
         // update the user and pass w
         const updateUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $push: { tickets: ticket } }
+          { $push: { tickets: {tickets} } }
         );
 
         return updateUser;

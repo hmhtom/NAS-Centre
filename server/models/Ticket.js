@@ -12,16 +12,16 @@ const ticketSchema = new Schema({
   },
 
   //   seatId
-  seatInfo: [seatSchema],
+  seatInfo: seatSchema,
 
 
   // eventId
-  eventId: [
+  event: 
     {
       type: Schema.Types.ObjectID,
       ref: 'Event',
     },
-  ],
+  
 });
 const Ticket= mongoose.model('Ticket', ticketSchema);
 
