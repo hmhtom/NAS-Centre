@@ -18,35 +18,14 @@ const typeDefs = gql`
     ticketsSold: [Ticket]
   }
 
-  input EventInput {
-    _id: ID!
-    eventName: String!
-    description: String!
-    image: String!
-    date: String!
-    price: Float!
-    availableSeats: Int!
-    ticketsSold: [TicketInput]
-  }
-
   type Ticket {
     _id: ID!
     purchaseDate: String!
-    seatInfo: Seat!
+    seatNumber: String
     event: Event
-  }
-  input TicketInput {
-    _id: ID!
-    purchaseDate: String!
-    seatInfo: SeatInput!
-    event: EventInput
   }
 
   type Seat {
-    _id: ID!
-    seatNumber: String!
-  }
-  input SeatInput {
     _id: ID!
     seatNumber: String!
   }
@@ -74,13 +53,13 @@ const typeDefs = gql`
     ticket(_id: ID!): Ticket
     user: User
     event(_id: ID!): Event
-    checkout(tickets: [TicketInput]!): Checkout
+    checkout: Checkout
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     updateUser(username: String, email: String, password: String): User
-    saveTicket(ticket: TicketInput!): User
+    saveTicket(seatNumber: String!, event: ID!): User
     deleteTicket(ticketId: String!): User
     login(email: String!, password: String!): Auth
   }
