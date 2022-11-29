@@ -50,6 +50,7 @@ const typeDefs = gql`
     allEvents: [Event]
     categories: [Category]
     event(_id: ID!): Event
+    seats: [Seat]
     tickets(event: ID, eventName: String, date: String): [Ticket]
     ticket(_id: ID!): Ticket
     user: User

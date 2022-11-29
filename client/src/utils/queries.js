@@ -104,3 +104,12 @@ export const QUERY_TICKET = gql`
     }
   }
 `;
+
+export const QUERY_SEATS = gql`
+  {
+    seats {
+      _id
+      seatNumber
+    }
+  }
+`;
