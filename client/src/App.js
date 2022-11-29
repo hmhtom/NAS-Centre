@@ -19,6 +19,7 @@ import MyTickets from "./pages/MyTickets";
 //Import Components
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import Box from "@mui/material/Box";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -45,17 +46,19 @@ function App() {
       <ApolloProvider client={client}>
         <Router>
           <Nav />
+          <Box sx={{ minHeight: "80vh" }}>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={SignUp} />
+              <Route exact path="/event/:id" component={Event} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/tickets" component={MyTickets} />
+            </Switch>
+          </Box>
 
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/event/:id" component={Event} />
-            <Route exact path="/profile" component={Profile} />
-            <Route exact path="/tickets" component={MyTickets} />
-          </Switch>
+          <Footer />
         </Router>
-        <Footer />
       </ApolloProvider>
     </>
   );

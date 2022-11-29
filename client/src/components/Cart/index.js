@@ -13,9 +13,33 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
 import { useSelector, useDispatch } from "react-redux";
+import { emptyCart } from "../../utils/theaterSlice";
+import { useMutation } from "@apollo/client";
+import { ADD_TICKET } from "../../utils/mutations";
 
 export default function Cart() {
   const cart = useSelector((state) => state.theater.cart);
+  const dispatch = useDispatch();
+
+  const [addTicket] = useMutation(ADD_TICKET);
+
+  const handleCheckout = async () => {
+    cart.map(async (ticket) => {
+      try {
+        await addTicket({
+          variables: {
+            seatNumber: ticket.seatNumber,
+            event: ticket.event._id,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    dispatch({
+      type: emptyCart,
+    });
+  };
 
   const total = () => {
     let total = 0;
@@ -71,6 +95,7 @@ export default function Cart() {
             </Table>
           </TableContainer>
           <Button
+            onClick={handleCheckout}
             variant="contained"
             sx={{ alignSelf: "flex-end", justifySelf: "flex-end" }}>
             Check Out

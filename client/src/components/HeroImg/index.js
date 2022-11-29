@@ -1,14 +1,12 @@
 import Box from "@mui/material/Box";
 
-function HeroImg() {
+function HeroImg({ src }) {
   return (
     <Box
+      component="img"
+      src={src}
       sx={{
         height: "85vh",
-        backgroundImage: "url(https://source.unsplash.com/random)",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
       }}
     />
   );

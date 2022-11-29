@@ -2,13 +2,13 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary">
       {"Copyright © "}
-      <Link color="inherit" href="/">
+      <Link to="/" style={{ color: "gray" }}>
         NAS Centre
       </Link>{" "}
       {new Date().getFullYear()}

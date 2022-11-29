@@ -62,9 +62,6 @@ function Nav() {
                 MenuListProps={{
                   "aria-labelledby": "basic-button",
                 }}>
-                <MenuItem component={(ListItemButton, Link)} to="/profile">
-                  Profile
-                </MenuItem>
                 <MenuItem component={(ListItemButton, Link)} to="/tickets">
                   MyTickets
                 </MenuItem>

@@ -39,10 +39,16 @@ const resolvers = {
       return await Event.findById(_id).populate("event");
     },
     user: async (parent, args, context) => {
+      console.log(123);
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id }).select(
-          "-__v -password"
-        );
+        const userData = await User.findOne({ _id: context.user._id })
+          .populate({
+            path: "tickets",
+            populate: {
+              path: "event",
+            },
+          })
+          .select("-__v -password");
         return userData;
       }
       throw new AuthenticationError("You need to be logged in!");
@@ -122,7 +128,6 @@ const resolvers = {
         const ticket = await Ticket.create(args);
 
         // update the event with the ticketId push the ticket ID to the tickets sold array in the events
-        console.log(ticket);
         const updatedEvent = await Event.findOneAndUpdate(
           { _id: ticket.event },
           {
@@ -134,7 +139,7 @@ const resolvers = {
         // // update the user
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { tickets: ticket._id } },
+          { $push: { tickets: ticket._id } },
           { new: true }
         );
 

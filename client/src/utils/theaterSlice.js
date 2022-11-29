@@ -41,6 +41,9 @@ export const theaterSlice = createSlice({
       });
       state.cart = updatedList;
     },
+    emptyCart: (state) => {
+      state.cart = [];
+    },
   },
 });
 
@@ -53,6 +56,7 @@ export const {
   removeTicket,
   updateCategories,
   updateSeats,
+  emptyCart,
 } = theaterSlice.actions;
 
 export default theaterSlice.reducer;
