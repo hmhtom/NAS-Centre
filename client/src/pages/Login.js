@@ -58,7 +58,7 @@ export default function Login() {
         sm={4}
         md={6}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundImage: "url(https://picsum.photos/1600)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
