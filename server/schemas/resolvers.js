@@ -13,6 +13,11 @@ const resolvers = {
     categories: async () => {
       return await Category.find().populate("events");
     },
+
+    event: async (parents, { _id }) => {
+      return await Event.findById(_id);
+    },
+
     tickets: async (parents, { event, eventName }) => {
       const params = {};
 

@@ -70,10 +70,10 @@ const typeDefs = gql`
   type Query {
     allEvents: [Event]
     categories: [Category]
+    event(_id: ID!): Event
     tickets(event: ID, eventName: String, date: String): [Ticket]
     ticket(_id: ID!): Ticket
     user: User
-    event(_id: ID!): Event
     checkout(tickets: [TicketInput]!): Checkout
   }
 
