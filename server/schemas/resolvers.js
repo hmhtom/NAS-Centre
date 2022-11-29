@@ -32,7 +32,9 @@ const resolvers = {
       }
       return await Event.find(params).populate(event);
     },
-
+    seats: async () => {
+      return await Seat.find();
+    },
     ticket: async (parents, { _id }) => {
       return await Event.findById(_id).populate("event");
     },

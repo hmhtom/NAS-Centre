@@ -5,7 +5,8 @@ export const theaterSlice = createSlice({
   initialState: {
     events: [],
     categories: [],
-    tickets: [],
+    seats: [],
+    cart: [],
     currentTicket: {},
     currentEvent: {},
   },
@@ -25,17 +26,20 @@ export const theaterSlice = createSlice({
     updateCategories: (state, actions) => {
       state.categories = actions.categories;
     },
+    updateSeats: (state, actions) => {
+      state.seats = actions.seats;
+    },
     addTicket: (state, actions) => {
-      state.tickets = [...state.tickets, actions.tickets];
+      state.cart = [...state.cart, actions.ticket];
     },
     updateTicket: (state, actions) => {
       state.currentTicket = actions.ticket;
     },
     removeTicket: (state, actions) => {
-      let updatedList = state.tickets.filter((ticket) => {
-        return ticket._id !== actions._id;
+      let updatedList = state.cart.filter((ticket) => {
+        return ticket.tempId !== actions.tempId;
       });
-      state.tickets = updatedList;
+      state.cart = updatedList;
     },
   },
 });
@@ -48,6 +52,7 @@ export const {
   updateTicket,
   removeTicket,
   updateCategories,
+  updateSeats,
 } = theaterSlice.actions;
 
 export default theaterSlice.reducer;
