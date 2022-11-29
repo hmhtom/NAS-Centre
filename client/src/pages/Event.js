@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
-import {useQuery} from '@apollo/client';
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -12,34 +12,29 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  updateEvent,
-} from "../utils/theaterSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { updateEvent } from "../utils/theaterSlice";
 
-import {QUERY_EVENT} from '../utils/queries';
+import { QUERY_EVENT } from "../utils/queries";
 
 export default function Event() {
-
-  const {id} = useParams();
+  const { id } = useParams();
   const events = useSelector((state) => state.theater.events);
   const dispatch = useDispatch();
   const [currentEvent, setCurrentEvent] = useState({});
-  const {loading, data} = useQuery(QUERY_EVENT, {
-    variables: {id: id},
+  const { loading, data } = useQuery(QUERY_EVENT, {
+    variables: { id: id },
   });
-  console.log(id);
-  console.log(events);
+
   useEffect(() => {
     console.log(data);
 
-    if (events.length) {
+    if (events.length > 0) {
       setCurrentEvent(events.find((event) => event._id === id));
+    } else if (data) {
+      dispatch({ type: updateEvent, events: data.events });
     }
-    else if (data) {
-      dispatch({ type: updateEvent, events: data.events,});
-    } 
-  },[events, data, loading, dispatch, id]);
+  }, [events, data, loading, dispatch, id]);
 
   return (
     <Grid container sx={{ justifyContent: "space-around" }}>
@@ -73,25 +68,19 @@ export default function Event() {
         </Typography>
         <Box m={3}>
           {/* Render Sold out if there is no more available seats */}
-          {currentEvent.availableSeats.length > 0 
-          ?
-          <div>
-          <Button fullWidth variant="contained">
-            Buy Ticket
-          </Button>
-          <Button fullWidth variant="contained" disabled>
-            Sold Out
-          </Button>
-          </div>
-          :
-          <div>
-          <Button fullWidth variant="contained" disabled>
-            Buy Ticket
-          </Button>
-          <Button fullWidth variant="contained">
-            Sold Out
-          </Button>
-          </div>}
+          {currentEvent.availableSeats > 0 ? (
+            <div>
+              <Button fullWidth variant="contained">
+                Buy Ticket
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button fullWidth variant="contained">
+                Sold Out
+              </Button>
+            </div>
+          )}
         </Box>
       </Grid>
       <Grid item xs={12} sm={11} md={9} lg={8} m={3}>
