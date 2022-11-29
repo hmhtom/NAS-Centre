@@ -52,8 +52,6 @@ const typeDefs = gql`
     event(_id: ID!): Event
     tickets(event: ID, eventName: String, date: String): [Ticket]
     ticket(_id: ID!): Ticket
-    user: User
-    event(_id: ID!): Event
     checkout(events: [ID]!): Checkout
   }
 
