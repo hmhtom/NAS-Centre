@@ -25,16 +25,20 @@ export default function Event() {
   const events = useSelector((state) => state.theater.events);
   const dispatch = useDispatch();
   const [currentEvent, setCurrentEvent] = useState({});
-  const {loading, data} = useQuery(QUERY_EVENT);
+  const {loading, data} = useQuery(QUERY_EVENT, {
+    variables: {id: id},
+  });
   console.log(id);
-  console.log(data);
+  console.log(events);
   useEffect(() => {
+    console.log(data);
+
     if (events.length) {
       setCurrentEvent(events.find((event) => event._id === id));
     }
     else if (data) {
       dispatch({ type: updateEvent, events: data.events,});
-    }
+    } 
   },[events, data, loading, dispatch, id]);
 
   return (
@@ -69,7 +73,7 @@ export default function Event() {
         </Typography>
         <Box m={3}>
           {/* Render Sold out if there is no more available seats */}
-          {currentEvent.tickets.length > 0 
+          {currentEvent.availableSeats.length > 0 
           ?
           <div>
           <Button fullWidth variant="contained">

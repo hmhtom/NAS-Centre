@@ -16,7 +16,7 @@ function EventCard(props) {
   return (
     <Grid item xs={9} sm={6} lg={4} xl={3}>
       <Card sx={{ maxWidth: 345 }}>
-        <CardMedia component="img" alt="placeholder" height="140" image={props.image} />
+        <CardMedia component="img" alt="placeholder" height="140" image={`${props.image}`} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {`${props.eventName}`}
@@ -29,7 +29,7 @@ function EventCard(props) {
           {/* <Link to="/event">
             <Button>Learn More</Button>
           </Link> */}
-          <Button component={Link} to="/event">
+          <Button component={Link} to={`/event/${props._id}`}>
             Learn More
           </Button>
           {/* Render Sold out if there is no more seats */}

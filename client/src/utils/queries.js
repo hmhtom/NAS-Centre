@@ -35,17 +35,18 @@ export const QUERY_ALL_CATEGORIES = gql`
 `;
 
 export const QUERY_EVENT = gql`
-    query getEvent($id: id) {
+    query getEvent($id: ID) {
         event (_id: $id){
+            _id
             eventName
             description
             image
             date
-            quantity
-            tickets {
-                price
-                seatNumber
-            }
+            price
+            availableSeats
+            ticketsSold {
+                _id
+            }           
         }
     }
 `;
