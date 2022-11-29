@@ -77,16 +77,15 @@ export const QUERY_USER = gql`
     user {
       userName
       email
-      password
-      events {
-        eventName
-        date
-        tickets {
-          purchaseDate
-          seatNumber
-          user
+      password     
+      tickets {
+        purchaseDate
+        seatNumber
+        event {
+            date
+            eventName
         }
-      }
+        }
     }
   }
 `;
