@@ -9,36 +9,50 @@ import Grid from "@mui/material/Grid";
 
 // New imports
 import { useSelector, useDispatch } from "react-redux";
-import { updateEvent } from "../../utils/theaterSlice";
+import { updateEvent, updateCategories } from "../../utils/theaterSlice";
 import { useQuery } from "@apollo/client";
-import { QUERY_ALL_EVENTS } from "../../utils/queries";
+import { QUERY_ALL_EVENTS, QUERY_ALL_CATEGORIES } from "../../utils/queries";
 //
 function EventList() {
   const [tabIndex, setTabIndex] = useState(0);
   //
   //const currentCategory = useSelector((state) => state.store.currentCategory);
   const events = useSelector((state) => state.theater.events);
+  const categories = useSelector((state) => state.theater.categories);
   const dispatch = useDispatch();
-  const { loading, data } = useQuery(QUERY_ALL_EVENTS);
-  console.log(useQuery(QUERY_ALL_EVENTS));
-  useEffect(() => {
-    console.log("use effect touched");
-    if (data) {
-      console.log(data);
+  const { loading: eventsLoading, data: eventsData } =
+    useQuery(QUERY_ALL_EVENTS);
+  const { loading: categoriesLoading, data: categoriesData } =
+    useQuery(QUERY_ALL_CATEGORIES);
 
+  useEffect(() => {
+    if (eventsData) {
       dispatch({
         type: updateEvent,
-        events: data.allEvents,
+        events: eventsData.allEvents,
       });
-      console.log(data);
     }
-  }, [data, loading, dispatch]);
+    if (categoriesData) {
+      dispatch({
+        type: updateCategories,
+        categories: categoriesData.categories,
+      });
+    }
+  }, [eventsData, categoriesData, eventsLoading, categoriesLoading, dispatch]);
 
   function filterEvents() {
-    //if (!currentCategory){
-    return events;
-    // }
-    // return events.filter((event) => event.category._id === currentCategory);
+    switch (tabIndex) {
+      case 0:
+        return events;
+      case 1:
+        return categories[1].events;
+      case 2:
+        return categories[0].events;
+      case 3:
+        return categories[2].events;
+      default:
+        return events;
+    }
   }
   //
   const handleChange = (event, newTabIndex) => {
