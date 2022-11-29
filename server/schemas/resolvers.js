@@ -15,6 +15,7 @@ const resolvers = {
     },
 
     event: async (parents, { _id }) => {
+      console.log("beep");
       return await Event.findById(_id);
     },
 
