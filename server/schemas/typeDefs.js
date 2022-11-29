@@ -54,8 +54,7 @@ const typeDefs = gql`
     ticket(_id: ID!): Ticket
     user: User
     event(_id: ID!): Event
-    checkout: Checkout
-
+    checkout(events: [ID]!): Checkout
   }
 
   type Mutation {
