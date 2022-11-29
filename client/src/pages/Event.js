@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
 import Grid from "@mui/material/Grid";
@@ -27,8 +27,6 @@ export default function Event() {
   });
 
   useEffect(() => {
-    console.log(data);
-
     if (events.length > 0) {
       setCurrentEvent(events.find((event) => event._id === id));
     } else if (data) {
@@ -45,20 +43,15 @@ export default function Event() {
         md={9}
         lg={8}
         my={2}
+        component="img"
+        src={`../${currentEvent.image}`}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "covered",
-          backgroundPosition: "center",
           height: "80vh",
         }}
       />
       <Grid item xs={12} sm={11} md={9} lg={8} m={3} component={Paper}>
         <Typography variant="h4" mx={3} gutterBottom>
           {currentEvent.eventName}
-        </Typography>
-        <Typography variant="h6" m={3} gutterBottom>
-          Placer Holder for SubTitle(Performer Name/Sport Team)
         </Typography>
         <Typography variant="body1" m={3} gutterBottom>
           {currentEvent.description}
