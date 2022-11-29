@@ -11,9 +11,8 @@ const ticketSchema = new Schema({
   },
 
   //   seatId
-  seatInfo: {
-    type: Schema.Types.ObjectID,
-    ref: "Seat",
+  seatNumber: {
+    type: String,
   },
 
   // eventId

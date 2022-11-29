@@ -117,25 +117,26 @@ const resolvers = {
     saveTicket: async (parent, args, context) => {
       if (context.user) {
         // create the ticket,
-        // const decrement = Math.abs(availableSeats) * -1;
         const ticket = await Ticket.create(args);
 
         // update the event with the ticketId push the ticket ID to the tickets sold array in the events
         console.log(ticket);
-        const updateEvent = await Event.findOneAndUpdate(
-          { _id: Ticket.event },
-          { $inc: { availableSeats: Math.abs(args.event.availableSeats) - 1 } },
-          { new: true },
-          { $push: { ticketsSold: ticket } }
+        const updatedEvent = await Event.findOneAndUpdate(
+          { _id: ticket.event },
+          {
+            $addToSet: { ticketsSold: ticket._id },
+            $inc: { availableSeats: -1 },
+          },
+          { new: true }
         );
-
-        // update the user and pass w
-        const updateUser = await User.findOneAndUpdate(
+        // // update the user
+        const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $push: { tickets: { tickets } } }
+          { $addToSet: { tickets: ticket._id } },
+          { new: true }
         );
 
-        return updateUser;
+        return updatedUser;
       }
       throw new AuthenticationError("Not logged in");
     },
