@@ -43,12 +43,11 @@ const resolvers = {
       const url = new URL(context.headers.referer).origin;
 
       const line_items = [];
+      const events = await Event.find({ _id: { $in: args.events } });
 
-      for (let i = 0; i < args.length; i++) {
-        const events = await stripe.events.create({
+      for (let i = 0; i < events.length; i++) {
+        const event = await stripe.events.create({
           name: events[i].eventName,
-          description: events[i].description,
-          // images: [`${url}/images/${event[i].image}`]
         });
 
         const price = await stripe.prices.create({
@@ -59,7 +58,7 @@ const resolvers = {
 
         line_items.push({
           price: price.id,
-          ticketsSold: 1,
+          quantity: 1,
         });
       }
 
@@ -157,4 +156,5 @@ const resolvers = {
     },
   },
 };
+
 module.exports = resolvers;
