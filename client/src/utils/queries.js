@@ -75,17 +75,19 @@ export const QUERY_CATEGORY = gql`
 export const QUERY_USER = gql`
   {
     user {
-      userName
+      _id
       email
-      password     
+      username
       tickets {
+        _id
         purchaseDate
         seatNumber
         event {
-            date
-            eventName
+          _id
+          date
+          eventName
         }
-        }
+      }
     }
   }
 `;

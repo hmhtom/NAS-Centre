@@ -37,14 +37,6 @@ function EventCard(props) {
           <Button component={Link} to={`/event/${props._id}`}>
             Learn More
           </Button>
-          {/* Render Sold out if there is no more seats */}
-          {props.availableSeats > 0 ? (
-            <Button size="small">Buy Ticket</Button>
-          ) : (
-            <Button size="small" disabled>
-              Sold Out
-            </Button>
-          )}
         </CardActions>
       </Card>
     </Grid>
