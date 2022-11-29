@@ -39,9 +39,7 @@ function EventCard(props) {
           </Button>
           {/* Render Sold out if there is no more seats */}
           {props.availableSeats > 0 ? (
-            <Button component={Link} size="small">
-              Buy Ticket
-            </Button>
+            <Button size="small">Buy Ticket</Button>
           ) : (
             <Button size="small" disabled>
               Sold Out

@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const theaterSlice = createSlice({
   name: "theater",
   initialState: {
-    // Populate these as needed down the line
     events: [],
+    categories: [],
     tickets: [],
     currentTicket: {},
     currentEvent: {},
@@ -20,9 +20,10 @@ export const theaterSlice = createSlice({
       state.events = updatedList;
     },
     updateEvent: (state, actions) => {
-        console.log("Action touched");
-        console.log(actions);
       state.events = actions.events;
+    },
+    updateCategories: (state, actions) => {
+      state.categories = actions.categories;
     },
     addTicket: (state, actions) => {
       state.tickets = [...state.tickets, actions.tickets];
@@ -46,8 +47,7 @@ export const {
   addTicket,
   updateTicket,
   removeTicket,
+  updateCategories,
 } = theaterSlice.actions;
-
-console.log(theaterSlice.reducer);
 
 export default theaterSlice.reducer;
